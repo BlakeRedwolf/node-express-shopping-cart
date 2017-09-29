@@ -1,0 +1,16 @@
+.navbar {
+  margin-bottom: 25px;
+}
+
+.card {
+  margin-bottom: 25px;
+}
+
+.thumbnail .description {
+  color: #7f7f7f;
+}
+
+.price {
+  font-weight: bold;
+  font-size: 15px;
+}
