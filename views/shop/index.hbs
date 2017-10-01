@@ -5,12 +5,12 @@
     <div class="card">
       <img src="{{ this.imagePath }}" class="card-img-top " alt="...">
       <div class="card-body">
-        <h3 class="card-title">Title</h3>
-        <h6 class="card-subtitle">Title</h6>
-        <p class="description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis quibusdam distinctio voluptatibus reprehenderit quasi repudiandae deserunt. Numquam accusamus repellendus mollitia natus suscipit aliquid? Culpa commodi unde fugit eveniet consequatur dolorem.</p>
+        <h3 class="card-title">{{ this.title }}</h3>
+        <h6 class="card-subtitle">Subtitle</h6>
+        <p class="description">{{ this.description }}</p>
         <div class="clearfix">
-          <div class="price pull-left">$24</div>
-          <a href="#" class="btn btn-dark pull-right" role="button">Button</a>
+          <div class="price pull-left">${{ this.price }}.00 + Free Shipping in the US</div>
+          <a href="#" class="btn btn-dark pull-right" role="button">Add to Shopping Cart</a>
         </div>
       </div>
     </div>
