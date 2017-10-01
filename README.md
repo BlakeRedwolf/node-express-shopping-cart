@@ -12,6 +12,8 @@
 
 + MongoDB (Mongoose) for storing product & user data.
 
+![node-express-shopping-cart_demo-1](https://user-images.githubusercontent.com/22486834/31053612-4e052858-a656-11e7-876a-340f1ebdacac.PNG)
+
 ### Demo Link
 
 [node-express-shopping-cart demo](http://)
