@@ -22,8 +22,10 @@ router.get('/user/signup', function(req, res, next) {
   res.render('user/signup', {csrfToken: req.csrfToken()});
 });
 
-router.post('/user/signup', function(req, res, next) {
-  res.redirect('/');
-});
+router.post('/user/signup', passport.authenticate('local.signup', {
+  successRedirect: '/profile',
+  failureRedirect: '/signup',
+  failureFlash: true
+}));
 
 module.exports = router;
