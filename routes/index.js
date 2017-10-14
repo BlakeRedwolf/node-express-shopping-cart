@@ -4,6 +4,8 @@ var Product = require('../models/product');
 var csrf = require('csurf');
 var passport = require('passport');
 
+var Product = require('../models/product');
+
 var csrfProtection = csrf();
 router.use(csrfProtection);
 
