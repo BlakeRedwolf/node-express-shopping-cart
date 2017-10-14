@@ -15,6 +15,7 @@ var index = require('./routes/index');
 var app = express();
 
 mongoose.connect('localhost:27017/node-express-shopping-cart');
+require('./config/passport');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views')); // Default view engine path
