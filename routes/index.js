@@ -48,3 +48,5 @@ router.post('/user/signin', passport.authenticate('local.signin', {
 }));
 
 module.exports = router;
+
+// LF@#10 Route Grouping & Protection (Middleware) 0.05
