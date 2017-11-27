@@ -16,15 +16,20 @@ passport.use('local.signup', new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
-}, function(req, email, password, done){
-    req.checkBody('email', 'invalid email').notEmpty().isEmail();
-    req.checkBody('password', 'invalid password').notEmpty().isLength({min:4});
+}, function(req, email, password, done) {
+    // Check email field, and send back email if invalid, then chain your validator functions
+    req.checkBody('email', 'Invalid email').notEmpty().isEmail();
+    req.checkBody('password', 'Invalid password').notEmpty().isLength({min:4});
+    // Handle errors thrown by request
     var errors = req.validationErrors();
+    // Check for errors
     if (errors) {
         var messages = [];
+        // For each error, push to message array
         errors.forEach(function(error) {
             message.push(error.msg);
         });
+        // If ! error but unsuccessful flash a message
         return done(null, false, req.flash('error', messages));
     }
     User.findOne({'email': email}, function(err, user) {
@@ -43,5 +48,37 @@ passport.use('local.signup', new LocalStrategy({
                 }
                 return done(null, newUser);
             });
+    });
+}));
+
+passport.use('local.signin', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+}, function(req, email, password, done) {
+    req.checkBody('email', 'Invalid email').notEmpty().isEmail();
+    req.checkBody('password', 'Invalid password').notEmpty().isLength({min:4});
+    var errors = req.validationErrors();
+    if (errors) {
+        var messages = [];
+        errors.forEach(function(error) {
+            message.push(error.msg);
+        });
+        return done(null, false, req.flash('error', messages));
+    }
+    // Find User
+    User.findOne({'email': email}, function(err, user) {
+        if (err) {
+            return done(err);
+        }
+        if (user) {
+            return done(null, false, {message: 'No user found!'});
+        }
+        // Helper function defined in user model
+        if(!user.validPassword(password)) {
+            return done(null, false, {message: 'No user found!'});
+        }
+        // If all validation passes above, then error=null and return user
+        return done(null, user);
     });
 }));
