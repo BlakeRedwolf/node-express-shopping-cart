@@ -6,6 +6,20 @@ var passport = require('passport');
 var csrfProtection = csrf();
 router.use(csrfProtection);
 
+// *The order of these routes are very important*
+router.get('/profile', isLoggedIn, function(req, res, next) {
+  res.render('user/profile');
+});
+
+router.get('/logout', isLoggedIn, function(req, res, next) {
+  req.logout();
+  res.redirect('/');
+});
+
+router.use('/', notLoggedIn, function(req, res, next) {
+  next();
+});
+
 router.get('/signup', function(req, res, next) {
     var messages= req.flash('error');
     res.render('user/signup', {csrfToken: req.csrfToken(), messages: messages, hasErrors: messages.length > 0});
@@ -16,10 +30,6 @@ router.get('/signup', function(req, res, next) {
     failureRedirect: '/user/signup',
     failureFlash: true
   }));
-  
-  router.get('/profile', function(req, res, next) {
-    res.render('user/profile');
-  });
   
   router.get('/signin', function(req, res, next) {
     var messages = req.flash('error');
@@ -32,6 +42,24 @@ router.get('/signup', function(req, res, next) {
     failureFlash: true
   }));
 
+  
+
+  
+
   module.exports = router;
+
+  function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/');
+  }
+
+  function notLoggedIn(req, res, next) {
+    if(!req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect('/');
+  }
 
   // LF@#10-1:51 Checking to make sure new user routes (new user.js) is working after re-routing
