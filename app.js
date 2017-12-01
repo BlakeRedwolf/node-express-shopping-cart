@@ -10,6 +10,7 @@ var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
 var validator = require('express-validator');
+var MongoStore = require('connect-mongo')(session);
 
 var index = require('./routes/index');
 var userRoutes = require('./routes/user');
@@ -21,7 +22,7 @@ require('./config/passport');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views')); // Default view engine path
-app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
+app.engine('.hbs', expressHbs({ defaultLayout: 'layout', extname: '.hbs' }));
 app.set('view engine', '.hbs');
 
 // uncomment after placing your favicon in /public
@@ -31,14 +32,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use(cookieParser());
-app.use(session({secret: 'mysupersecret', resave: false, saveUninitialized: false}));
+app.use(session({
+  secret: 'mysupersecret',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 180 * 60 * 1000 } // set to expire after 3 hours (180 mins)
+}));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
-
+// Middleware - Authentication - Session Obj
 app.use(function(req, res, next) {
   res.locals.login = req.isAuthenticated();
+  res.locals.session = req.session; // Pass session obj so i dont have to pass it explicitly in my routes functions
+  // I can now access the session var in all my views
   next();
 });
 
